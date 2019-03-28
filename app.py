@@ -7,7 +7,9 @@ from models.yolo import Yolo2Model
 def evaluate():
 	win_name = 'Detector'
 	cv2.namedWindow(win_name)
-	cam = cv2.VideoCapture('./input.avi')
+	cam = cv2.VideoCapture(0)
+	fourcc = cv2.VideoWriter_fourcc(*'MJPG')
+	writer = cv2.VideoWriter('output.mp4', fourcc, 10.0, (640, 480))
 
 	source_h = cam.get(cv2.CAP_PROP_FRAME_HEIGHT)
 	source_w = cam.get(cv2.CAP_PROP_FRAME_WIDTH)
@@ -44,6 +46,7 @@ def evaluate():
 
 
 			cv2.imshow(win_name, frame)
+			writer.write(frame)
 
 			key = cv2.waitKey(1) & 0xFF
 
@@ -55,6 +58,7 @@ def evaluate():
 	finally:
 		cv2.destroyAllWindows()
 		cam.release()
+		writer.release()
 		model.close()
 
 
